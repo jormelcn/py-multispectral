@@ -29,4 +29,4 @@ rgbImg = img.rgb() # Array de Numpy RGB con valores de 0 a 1
 ```
 
 ## Ejemplo
-[a relative link](example.py)
+[example.py](example.py)
