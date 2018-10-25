@@ -1,4 +1,4 @@
-#********************************** Librerias ****************************************
+#********************************** Cargar Librerías ****************************************
 from multispectral import Multispectral
 import matplotlib.pyplot as plt
 import numpy as np
@@ -32,7 +32,7 @@ def plotNIR(img):
 def printImageDataInfo(img):
     print('\nDatos de imagen %s' % (img.pathFolder.name))
     print('Sensor: ', img.extension)
-    print('Images Name Patern: ', img.namePatern)
+    print('Patron del nombre de las imágenes: ', img.namePatern)
     # Obtener array VNIR
     vnir = img.vnir
     print('VNIR Data Array Shape ', vnir.shape)
@@ -44,10 +44,10 @@ def printImageDataInfo(img):
 
 #************************* Programa de Ejemplo de Uso de Multispectral *******************
 
-# Trabajar con images de tamaño máximo 800x800
+# Trabajar con imágenes de tamaño máximo 800x800
 Multispectral.idealShape = (800, 800)
 
-# Trabajar con Imágenes Originales
+# Trabajar con imágenes Originales
 #Multispectral.idealShape = None
 
 # Habilitar modo informativo (Imprime los procedimientos que ejecuta)
@@ -68,7 +68,7 @@ images = []
 for path in imagesPaths :
     images.append(Multispectral(path))
 
-# Mostrar las Imagenes 1 y 3 a Color
+# Mostrar las Imágenes 1 y 3 a Color
 plotRgbAndHistogram(images[3])
 plotRgbAndHistogram(images[1])
 
