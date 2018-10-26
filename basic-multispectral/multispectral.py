@@ -22,6 +22,9 @@ class Multispectral:
     chache = True
     vervose = False
 
+    RGBDinamicRange = .94
+    coloSpacePower = .3
+
 #********************************* Constructor **************************************
 
     def __init__(self, path, idealShape = None, cache = None) :
@@ -61,15 +64,32 @@ class Multispectral:
         if Multispectral.vervose:
             print(message)
 
-    def __normaliceRGB__(self, bands):
-        n_min, n_max = np.min(bands[bands > 0]), np.max(bands)
-        bands = np.clip((bands - n_min)/(n_max - n_min),0,1) 
-        hist, interv = np.histogram(bands,100)
-        hist, interv = hist[0:], interv[0:-1]
-        hist_cum = np.cumsum(hist)
-        b_max = interv[np.logical_and(hist < 0.04 * np.max(hist) , hist_cum > 0.85 * hist_cum[-1])][0]
-        b_min = np.min(bands[bands > .002 * b_max ])
-        return np.clip((bands - b_min)/(b_max - b_min), 0, 1)
+    def __colorSpace__(self, space):
+        return 2 - 2/(space**Multispectral.coloSpacePower + 1)
+
+    def __normalice__(self, img):
+        _nan = max(-100, np.min(img))
+        _min = np.min(img[img > _nan])
+        _max = np.max(img)
+        return np.clip((img - _min)/(_max - _min), 0,1 )
+
+    def __maxDinamicRange__(self, img):        
+        mins = np.zeros(img.shape[2])
+        maxs = np.zeros(img.shape[2])
+        for i in range(img.shape[2]):
+            relevant = img[:,:,i][img[:,:,i] > 0]
+            mins[i] = np.quantile(relevant , 1 - Multispectral.RGBDinamicRange)
+            maxs[i] = np.quantile(relevant, Multispectral.RGBDinamicRange)
+        _min = np.min(mins)
+        _max = np.max(maxs)
+        return np.interp(img, 
+        (0, _min, _max, np.max(img)), 
+        (0, 1 - Multispectral.RGBDinamicRange, Multispectral.RGBDinamicRange, 1))
+
+    def __normaliceRGB__(self, img):
+        _lin = np.linspace(0, 1, 100)
+        _img = np.interp(self.__normalice__(img), _lin, self.__colorSpace__(_lin))
+        return self.__maxDinamicRange__(_img)
 
     def __openDataSets__(self, path_names):
         dataSets = []

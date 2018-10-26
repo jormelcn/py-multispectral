@@ -15,9 +15,9 @@ def plotRgbAndHistogram(img):
     plt.title('Distribución de Intensidad del Color')
     rgb = img.rgb()
     r, g, b = rgb[:,:,0], rgb[:,:,1], rgb[:,:,2], 
-    r_hist, interv = np.histogram(r[np.logical_and(r > 0, r < 1)] ,100)
-    g_hist = np.histogram(g[np.logical_and(g > 0, g < 1)] ,100)[0]
-    b_hist = np.histogram(b[np.logical_and(b > 0, b < 1)] ,100)[0]
+    r_hist, interv = np.histogram(r[r > 0] ,100)
+    g_hist = np.histogram(g[g > 0] ,100)[0]
+    b_hist = np.histogram(b[b > 0] ,100)[0]
     plt.plot(interv[:-1], r_hist/rgb.size, color='r')
     plt.plot(interv[:-1], g_hist/rgb.size, color='g')
     plt.plot(interv[:-1], b_hist/rgb.size, color='b')
@@ -45,7 +45,7 @@ def printImageDataInfo(img):
 #************************* Programa de Ejemplo de Uso de Multispectral *******************
 
 # Trabajar con imágenes de tamaño máximo 800x800
-Multispectral.idealShape = (800, 800)
+Multispectral.idealShape = (1080, 1080)
 
 # Trabajar con imágenes Originales
 #Multispectral.idealShape = None
@@ -69,14 +69,16 @@ for path in imagesPaths :
     images.append(Multispectral(path))
 
 # Mostrar las Imágenes 1 y 3 a Color
-plotRgbAndHistogram(images[3])
+plotRgbAndHistogram(images[0])
 plotRgbAndHistogram(images[1])
+plotRgbAndHistogram(images[2])
+plotRgbAndHistogram(images[3])
 
 # Mostrar la banda NIR se la imagen 0 a escala de grises
-plotNIR(images[0])
+#plotNIR(images[0])
 
 # Imprimir Información de la imagen 1
-printImageDataInfo(images[1])
+#printImageDataInfo(images[1])
 
 
 # Mostrar Imágenes y Gráficas
