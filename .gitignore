@@ -1,3 +1,5 @@
 landsat-imagery/
 sentinel-imagery/
+*.png
+__pycache__/
 
